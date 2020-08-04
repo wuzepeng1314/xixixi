@@ -1,0 +1,72 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hero - Admin</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="./lib/jquery-1.12.2.js"></script>
+    <script src="./lib/template-web.js"></script>
+    <!-- 定义模板 -->
+    <script id="heroTemplate" type="text/html">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <td>姓名：</td>
+                    <td>
+                        <input value="{{$data.name}}" type="text" name="name">
+                    </td>
+                </tr>
+                <tr>
+                    <td>性别：</td>
+                    <td>
+                        <input id="man" name="gender" value="男" type="radio" {{ $data.gender==='男' ? 'checked' : ''}}>
+                        <label for="man">男</label>
+                        <input name="gender" value="女" type="radio" id="female" {{ $data.gender==='女' ? 'checked' : ''}}>
+                        <label for="female ">女</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>头像：</td>
+                    <td>
+                        <img src="{{$data.img}}" alt="" id="photo" width="100" style='border: 1px solid #ccc;margin-bottom: 5px;'>
+                        <input type="file" id="uploadInput">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" id="sub" value="保存"></td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
+    <script>
+        // 从首页通过URL传递英雄id到编辑页，传递过来是为了查询英雄的信息，进行回显
+        console.log(window.location.search) // ?id=3
+            // 通过split方法获取id的值
+        const id = window.location.search.split('=')[1];
+        // ajax请求,获取单个英雄的数据
+        $.get('http://127.0.0.1:3001/getHeroById', {
+            id
+        }, (res) => {
+            // 把数据显示到页面上,使用art-template
+            const renderTemplate = template('heroTemplate', res.data);
+            $('#myform').html(renderTemplate)
+        })
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="page-header container">
+            <h1>王者荣耀 <small>英雄管理器</small></h1>
+        </div>
+    </header>
+    <div class="container hero-list">
+        <form id='myform'>
+
+        </form>
+    </div>
+</body>
+
+</html>
